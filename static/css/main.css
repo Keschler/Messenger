@@ -1,0 +1,104 @@
+body {
+    margin: 0;
+    font-family: sans-serif;
+    overflow-x: hidden;
+}
+
+a {
+    color: inherit;
+}
+
+button {
+    width: min(100px, 10%);
+    background-color: rgb(184, 181, 181);
+    border: none;
+    display: inline-block;
+    color: black;
+    border-radius: 4px;
+    font-size: clamp(10px, 1vw, 3vw);
+    text-align: center;
+}
+
+#header {
+    display: flex;
+    justify-content: flex-end;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    height: 50px;
+    border-radius: 0;
+    width: 100%;
+    z-index: 1;
+    background-color: hsl(0, 0%, 85%);
+}
+
+
+#user_profile {
+    width: 5%;
+    /* Example size, adjust as needed */
+    height: 50px;
+    /* Same as width to create a circle */
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    /* Optional: Adds a subtle shadow */
+    margin-right: auto;
+    margin-left: 10px;
+}
+
+
+
+#feed {
+    border: 2px solid black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 2%;
+    flex-direction: column;
+    position: relative;
+    top: 20vh;
+}
+
+#feed>* {
+    width: 50%;
+}
+
+.user {
+    margin-bottom: 0;
+}
+
+.content {
+    padding-left: 5%;
+    margin-top: 0;
+}
+
+.post {
+    display: flex;
+    flex-direction: column;
+    border: 2px solid grey;
+    border-radius: 1px;
+}
+
+
+#post_button {
+    background-color: #1d699b;
+    color: black;
+    border-radius: 4px;
+    font-size: 2vw;
+    text-align: center;
+
+}
+
+#post_input {
+    padding: 10px;
+    font-size: 16px;
+    border: 2px solid var(--input-border);
+    border-radius: 4px;
+    position: absolute;
+    left: -54%;
+}
+
+#post_form {
+    position: relative;
+    top: 20vh;
+    left: 80%;
+}

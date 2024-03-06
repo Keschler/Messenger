@@ -1,0 +1,34 @@
+body, html {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column; /* Stack flex items vertically */
+    justify-content: center; /* Center vertically */
+    align-items: center; /* Center horizontally */
+    background-color: #f0f0f0; /* Light grey background */
+    font-family: Arial, sans-serif; /* Default font */
+}
+
+#outer_box {
+    width: 200px;
+    height: 200px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-top: 20px; /* Add space above the box */
+}
+
+#inner_box {
+    background-color: #fff; /* White background for the form */
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Subtle shadow for depth */
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Space between form elements */
+}
+
+#title {
+    font-size: 24px; /* Larger font size for title */
+    color: #333; /* Dark grey color */
+    font-weight: bold; /* Make the title bold */
+    align-self: center; /* Center the title */
+}
