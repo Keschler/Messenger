@@ -45,32 +45,6 @@ button {
     margin-left: 10px;
 }
 
-
-
-#feed {
-    border: 2px solid black;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 2%;
-    flex-direction: column;
-    position: relative;
-    top: 20vh;
-}
-
-#feed>* {
-    width: 50%;
-}
-
-.user {
-    margin-bottom: 0;
-}
-
-.content {
-    padding-left: 5%;
-    margin-top: 0;
-}
-
 .post {
     display: flex;
     flex-direction: column;
@@ -85,13 +59,15 @@ button {
     border-radius: 4px;
     font-size: 2vw;
     text-align: center;
+    width: 10%;
+    margin-left: auto;
 
 }
 
 #post_input {
     padding: 10px;
     font-size: 16px;
-    border: 2px solid var(--input-border);
+    border: 2px solid;
     border-radius: 4px;
     position: absolute;
     left: -54%;
@@ -101,4 +77,76 @@ button {
     position: relative;
     top: 20vh;
     left: 80%;
+}
+
+#feed {
+    margin: 0.5%;
+    border: 2px solid black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    position: relative;
+    top: 20vh;
+}
+
+#feed > * {
+    width: 50%;
+}
+
+.user {
+    margin: 0;
+}
+
+.content {
+    padding-left: 5%;
+    margin-top: 0;
+}
+
+
+.date {
+    text-align: right;
+    margin-bottom: 0;
+}
+
+.post_bar {
+    display: flex;
+    flex-direction: row;
+}
+
+.likes, .retweets {
+    width: 40px; /* adjust as needed */
+    height: 40px; /* should be equal to width */
+    padding: 10px; /* adjust as needed */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+}
+
+.likes {
+    margin-right: 50%;
+}
+
+.likes_image {
+    width: 40px;
+    background-image: url('https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.pngall.com%2Fwp-content%2Fuploads%2F5%2FLike-Button-PNG-Pic.png&f=1&nofb=1&ipt=4e1c367009a6684c71a6f7d4c3ebd585c5bc309ad01d4432116c523cf939315d&ipo=images');
+    background-size: cover;
+    background-repeat: no-repeat;
+    margin-right: 1%;
+}
+
+
+.retweet_image {
+    width: 40px;
+    background-image: url('https://cdn-icons-png.flaticon.com/512/1388/1388895.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    margin-right: 1%;
+}
+
+.likes_image:hover, .retweet_image:hover {
+    filter: drop-shadow(0 0 10px #007bff); /* adjust color and blur radius as needed */
+    transition: filter 0.1s ease-in-out;
+    background-position: center;
 }

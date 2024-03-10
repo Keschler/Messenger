@@ -9,30 +9,37 @@
 </head>
 
 <body>
-    <div id="header">
-        <button id="user_profile"><a href="{{ url_for('profile') }}">Profile</a></button>
-        {% if session.user %}
+<div id="header">
+    <button id="user_profile"><a href="{{ url_for('profile') }}">Profile</a></button>
+    {% if session.user %}
         <button id="logout_button">
             <a href="{{ url_for('logout') }}">Logout</a>
         </button>
-        {% else %}
+    {% else %}
         <button id="register_button">
             <a href="{{ url_for('register') }}">Register</a>
         </button>
-        {% endif %}
-    </div>
-    <form action="{{ url_for('post') }}" method="post" id="post_form">
-        <input type="text" placeholder="What do you want to share?" id="post_input" name="content">
-        <button id="post_button" type="submit">Post</button>
-    </form>
-    <div id="feed">
-        {% for post in posts %}
+    {% endif %}
+</div>
+<form action="{{ url_for('post') }}" method="post" id="post_form">
+    <input type="text" placeholder="What do you want to share?" id="post_input" name="content">
+    <button id="post_button" type="submit">Post</button>
+</form>
+<div id="feed">
+    {% for post in posts %}
         <div class="post">
-            <p class="user">{{post["user"]}}:</p>
-            <p class="content">{{post["content"]}}</p>
+            <p class="date">{{ post["date"] }}</p>
+            <p class="user">{{ post["user"] }}:</p>
+            <p class="content">{{ post["content"] }}</p>
+            <div class="post_bar">
+                <a class="likes_image" href="{{ url_for('likes', post_id=post['_id']) }}"></a>
+                <button class="likes">{{ post["likes"] }}</button>
+                <a class="retweet_image" href="{{ url_for('retweet', post_id=post['_id']) }}"></a>
+                <button class="retweets">{{ post["retweets"] }}</button>
+            </div>
         </div>
-        {% endfor %}
-    </div>
+    {% endfor %}
+</div>
 </body>
 
 </html>

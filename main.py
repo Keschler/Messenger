@@ -1,14 +1,14 @@
 from flask import Flask, render_template, url_for, request, redirect, session
 from pymongo import MongoClient
-from backend import register_user, login_user, get_all_posts, upload_message
+from backend import register_user, login_user, get_all_posts, upload_message, get_user_info, update_likes, \
+    update_retweets
 from datetime import timedelta
-import logging
-
+from functools import wraps
 
 app = Flask(__name__)
 app.secret_key = "5FGBisNot!mine"
 app.permanent_session_lifetime = timedelta(days=30)
-logging.basicConfig(level=logging.DEBUG)
+
 
 @app.route("/")
 def main():
@@ -17,6 +17,17 @@ def main():
         user = session["user"]
         return render_template("index.html", user=user, posts=posts)
     return render_template("index.html", posts=posts)
+
+
+def check_login(f):
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+        if "user" in session:
+            return f(*args, **kwargs)  # If user is logged in then execute the function
+        else:
+            return redirect(url_for("login"))
+
+    return wrapper
 
 
 @app.route("/register", methods=["GET", "POST"])
@@ -29,7 +40,8 @@ def register():
             session["user"] = username
             return redirect(url_for("main"))
         else:
-            return render_template("register.html", error="The username is given or your username/password does not match the right pattern")
+            return render_template("register.html",
+                                   error="The username is given or your username/password does not match the right pattern")
     elif request.method == "GET":
         if "user" in session:
             return redirect(url_for("main"))
@@ -54,18 +66,38 @@ def login():
 
 
 @app.route("/logout")
+@check_login
 def logout():
     session.pop("user", None)
     return redirect(url_for("main"))
 
-@app.route("/profile")
-def profile():
-    return render_template("profile.html")
 
 @app.route("/post", methods=["POST"])
+@check_login
 def post():
-    if "user" in session and request.form["content"]:
+    if request.form["content"]:
         upload_message(session["user"], request.form["content"])
+    return redirect(url_for("main"))
+
+
+@app.route("/profile")
+@check_login
+def profile():
+    get_user_info(session["user"])
+    return render_template("profile.html", username=session["user"])
+
+
+@app.route("/likes/<post_id>")
+@check_login
+def likes(post_id):
+    update_likes(post_id, session["user"])
+    return redirect(url_for("main"))
+
+
+@app.route("/retweet/<post_id>")
+@check_login
+def retweet(post_id):
+    update_retweets(post_id, session["user"])
     return redirect(url_for("main"))
 
 
