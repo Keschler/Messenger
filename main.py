@@ -1,7 +1,7 @@
 from flask import Flask, render_template, url_for, request, redirect, session
 from pymongo import MongoClient
-from backend import register_user, login_user, get_all_posts, upload_message, get_user_info, update_likes, \
-    update_retweets
+from backend import register_user, login_user, get_all_posts, upload_message, update_likes, \
+    update_retweets, get_user_posts
 from datetime import timedelta
 from functools import wraps
 
@@ -83,8 +83,8 @@ def post():
 @app.route("/profile")
 @check_login
 def profile():
-    get_user_info(session["user"])
-    return render_template("profile.html", username=session["user"])
+    posts = get_user_posts(session["user"])
+    return render_template("profile.html", username=session["user"], posts=posts)
 
 
 @app.route("/likes/<post_id>")

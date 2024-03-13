@@ -15,7 +15,8 @@ def register_user(username, password):
         hashed_password = bcrypt.hashpw(
             password.encode('utf-8'), bcrypt.gensalt())
         db["users"].insert_one({"_id": db["users"].count_documents(
-            {}) + 1, "username": username, "password": hashed_password})
+            {}) + 1, "username": username, "password": hashed_password, "posts": [], "liked_posts": [],
+                                "retweeted_posts": []})
         return True
     else:
         return False
@@ -34,6 +35,11 @@ def login_user(username, password):
 def get_all_posts():
     posts = db["posts"].find()
     return list(posts)
+
+
+def get_user_posts(username):
+    user_posts = db["users"].find_one({"username": username}, {"_id": 0})["posts"]
+    return user_posts
 
 
 def input_validation(username, password):
@@ -55,26 +61,27 @@ def upload_message(user, content):
         "liked_by": [],
         "retweeted_by": []
     }
-    db["posts"].insert_one(post)
+    db["posts"].insert_one(post)  # Insert the post into the database
+    db["users"].update_one({"username": user}, {"$push": {"posts": post}})
     return None
 
 
-def get_user_info(username):
-    user_info = db["users"].find_one({"username": username})
-    return user_info["username"]
-
-
 def update_likes(post_id, username):
-    if username not in db["posts"].find_one({"_id": int(post_id)})["liked_by"]: # If the user has not liked the post
+    if username not in db["posts"].find_one({"_id": int(post_id)})["liked_by"]:  # If the user has not liked the post
         db["posts"].update_one({"_id": int(post_id)}, {"$inc": {"likes": 1}, "$push": {"liked_by": username}})
+        db["users"].update_one({"username": username}, {"$push": {"liked_posts": int(post_id)}})
     else:
         db["posts"].update_one({"_id": int(post_id)}, {"$inc": {"likes": -1}, "$pull": {"liked_by": username}})
+        db["users"].update_one({"username": username}, {"$pull": {"liked_posts": int(post_id)}})
     return None
 
 
 def update_retweets(post_id, username):
-    if username not in db["posts"].find_one({"_id": int(post_id)})["retweeted_by"]: # If the user has not retweeted the post
+    if username not in db["posts"].find_one({"_id": int(post_id)})[
+        "retweeted_by"]:  # If the user has not retweeted the post
         db["posts"].update_one({"_id": int(post_id)}, {"$inc": {"retweets": 1}, "$push": {"retweeted_by": username}})
+        db["users"].update_one({"username": username}, {"$push": {"retweeted_posts": int(post_id)}})
     else:
         db["posts"].update_one({"_id": int(post_id)}, {"$inc": {"retweets": -1}, "$pull": {"retweeted_by": username}})
+        db["users"].update_one({"username": username}, {"$pull": {"retweeted_posts": int(post_id)}})
     return None
