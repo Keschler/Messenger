@@ -9,15 +9,25 @@
 </head>
 
 <body>
-    <div id="title">Profile</div>
-    <div id="outer_box">
-        <div id="inner_box">
-            {{ username }}
-        </div>
-        {% for post in posts %}
-            <p></p>{{ post }}
-        {% endfor %}
+<div id="title">Profile</div>
+<div id="outer_box">
+    <div id="inner_box">
+        {{ username }}
     </div>
+    {% for post in posts %}
+        <div class="post">
+            <p class="date">{{ post["date"] }}</p>
+            <p class="user">{{ post["user"] }}:</p>
+            <p class="content">{{ post["content"] }}</p>
+            <div class="post_bar">
+                <a class="likes_image" href="{{ url_for('likes', post_id=post['_id']) }}"></a>
+                <button class="likes">{{ post["likes"] }}</button>
+                <a class="retweet_image" href="{{ url_for('retweet', post_id=post['_id']) }}"></a>
+                <button class="retweets">{{ post["retweets"] }}</button>
+            </div>
+        </div>
+    {% endfor %}
+</div>
 </body>
 
 </html>

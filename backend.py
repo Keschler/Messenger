@@ -38,11 +38,11 @@ def get_all_posts():
 
 
 def get_user_posts(username):
-    user_posts = db["users"].find_one({"username": username}, {"_id": 0})["posts"]
+    user_posts = db["users"].find_one({"username": username})["posts"] # Get the posts of the user
     return user_posts
 
 
-def input_validation(username, password):
+def input_validation(username):
     username_pattern = re.compile("^[a-zA-Z0-9]+$")
     if username_pattern.match(username):
         return True

@@ -91,7 +91,7 @@ def profile():
 @check_login
 def likes(post_id):
     update_likes(post_id, session["user"])
-    return redirect(url_for("main"))
+    return redirect(session["last_page"])
 
 
 @app.route("/retweet/<post_id>")
