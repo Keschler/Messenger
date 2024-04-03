@@ -1,6 +1,6 @@
 from flask import Flask, render_template, url_for, request, redirect, session
 from backend import register_user, login_user, get_all_posts, upload_message, update_likes, \
-    update_retweets, get_user_posts
+    update_retweets, get_user_posts, add_comment
 from datetime import timedelta
 from functools import wraps
 
@@ -77,7 +77,7 @@ def post():
     if request.form["content"]:
         upload_message(session["user"], request.form["content"])
     return redirect(url_for("main"))
-    
+
 
 @app.route("/profile")
 @check_login
@@ -97,6 +97,14 @@ def likes(post_id):
 @check_login
 def retweet(post_id):
     update_retweets(post_id, session["user"])
+    return redirect(url_for("main"))
+
+
+@app.route("/comment/<post_id>")
+@check_login
+def comment(post_id):
+    if request.form["content"]:
+        add_comment(post_id, session["user"], request.form["content"])
     return redirect(url_for("main"))
 
 

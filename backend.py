@@ -117,3 +117,10 @@ def update_retweets(post_id, username):
             {"$inc": {"posts.$.retweets": -1}, "$pull": {"retweeted_posts": int_post_id}}
         )
     return None
+
+
+def add_comment(post_id, username, content):
+    db["posts"].update_one({"_id": int(post_id)}, {"$push": {"comments": {"user": username, "content": content,
+                                                                          "date": datetime.now().strftime(
+                                                                              "%Y-%m-%d %H:%M:%S")}}})
+    return None
