@@ -1,7 +1,7 @@
 from pymongo import MongoClient
 import bcrypt
 import re
-import datetime
+from datetime import datetime
 
 cluster = MongoClient(
     "mongodb+srv://spadabailu:T94jkJaEAooyLhnhicmLhWTRVi3mu9X3WPDxWfDfWACcKjMeWs@cluster0.fzgybta.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
@@ -56,13 +56,21 @@ def upload_message(user, content):
         "user": user,
         "content": content,
         "likes": 0,
-        "date": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "retweets": 0,
         "liked_by": [],
-        "retweeted_by": []
+        "retweeted_by": [],
+        "comments": []
     }
     db["posts"].insert_one(post)  # Insert the post into the database
     db["users"].update_one({"username": user}, {"$push": {"posts": post}})
+    return None
+
+
+def add_comment(post_id, username, content):
+    db["posts"].update_one({"_id": int(post_id)}, {"$push": {"comments": {"user": username, "content": content,
+                                                                          "date": datetime.now().strftime(
+                                                                              "%Y-%m-%d %H:%M:%S")}}})
     return None
 
 

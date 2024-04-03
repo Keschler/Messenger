@@ -32,6 +32,8 @@
             <p class="user">{{ post["user"] }}:</p>
             <p class="content">{{ post["content"] }}</p>
             <div class="post_bar">
+                # Not working because no function in main<a class="comment_image" href="{{ url_for('comment', post_id=post['_id']) }}"></a>
+                <button class="comment">{{ post["comments"] }}</button> #
                 <a class="likes_image" href="{{ url_for('likes', post_id=post['_id']) }}"></a>
                 <button class="likes">{{ post["likes"] }}</button>
                 <a class="retweet_image" href="{{ url_for('retweet', post_id=post['_id']) }}"></a>
