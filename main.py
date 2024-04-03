@@ -1,12 +1,11 @@
 from flask import Flask, render_template, url_for, request, redirect, session
-from pymongo import MongoClient
 from backend import register_user, login_user, get_all_posts, upload_message, update_likes, \
     update_retweets, get_user_posts
 from datetime import timedelta
 from functools import wraps
 
 app = Flask(__name__)
-app.secret_key = "5FGBisNot!mine"
+app.secret_key = "Halkd22f"
 app.permanent_session_lifetime = timedelta(days=30)
 
 
@@ -78,7 +77,7 @@ def post():
     if request.form["content"]:
         upload_message(session["user"], request.form["content"])
     return redirect(url_for("main"))
-
+    
 
 @app.route("/profile")
 @check_login
@@ -91,7 +90,7 @@ def profile():
 @check_login
 def likes(post_id):
     update_likes(post_id, session["user"])
-    return redirect(session["last_page"])
+    return redirect(url_for("main"))
 
 
 @app.route("/retweet/<post_id>")
@@ -102,4 +101,4 @@ def retweet(post_id):
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, port=8020)

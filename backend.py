@@ -9,7 +9,7 @@ db = cluster["twitter"]
 
 
 def register_user(username, password):
-    if not input_validation(username, password):
+    if not input_validation(username):
         return False
     if db["users"].find_one({"username": username}) is None:  # If there is no user with the same name
         hashed_password = bcrypt.hashpw(
@@ -23,7 +23,7 @@ def register_user(username, password):
 
 
 def login_user(username, password):
-    if not input_validation(username, password):
+    if not input_validation(username):
         return False
     user_info = db["users"].find_one({"username": username})
     if user_info and bcrypt.checkpw(password.encode("utf-8"), user_info["password"]):
@@ -38,7 +38,7 @@ def get_all_posts():
 
 
 def get_user_posts(username):
-    user_posts = db["users"].find_one({"username": username})["posts"] # Get the posts of the user
+    user_posts = db["users"].find_one({"username": username})["posts"]  # Get the posts of the user
     return user_posts
 
 
@@ -67,21 +67,45 @@ def upload_message(user, content):
 
 
 def update_likes(post_id, username):
-    if username not in db["posts"].find_one({"_id": int(post_id)})["liked_by"]:  # If the user has not liked the post
-        db["posts"].update_one({"_id": int(post_id)}, {"$inc": {"likes": 1}, "$push": {"liked_by": username}})
-        db["users"].update_one({"username": username}, {"$push": {"liked_posts": int(post_id)}})
+    int_post_id = int(post_id)
+    # Find the post to see if the user has liked it
+    post = db["posts"].find_one({"_id": int_post_id})
+
+    if post is None:
+        return "Post not found."
+    print(post)
+    # If the user has not liked the post
+    if username not in post.get("liked_by", []):
+        print("not liked")
+        db["posts"].update_one({"_id": int_post_id}, {"$inc": {"likes": 1}, "$push": {"liked_by": username}})
+        db["users"].update_one({"username": username, "posts._id": int_post_id},
+                               {"$inc": {"posts.$.likes": 1}, "$push": {"liked_posts": int_post_id}})
     else:
-        db["posts"].update_one({"_id": int(post_id)}, {"$inc": {"likes": -1}, "$pull": {"liked_by": username}})
-        db["users"].update_one({"username": username}, {"$pull": {"liked_posts": int(post_id)}})
+        db["posts"].update_one({"_id": int_post_id}, {"$inc": {"likes": -1}, "$pull": {"liked_by": username}})
+        db["users"].update_one({"username": username, "posts._id": int_post_id},
+                               {"$inc": {"posts.$.likes": -1}, "$pull": {"liked_posts": int_post_id}})
     return None
 
 
 def update_retweets(post_id, username):
-    if username not in db["posts"].find_one({"_id": int(post_id)})[
-        "retweeted_by"]:  # If the user has not retweeted the post
-        db["posts"].update_one({"_id": int(post_id)}, {"$inc": {"retweets": 1}, "$push": {"retweeted_by": username}})
-        db["users"].update_one({"username": username}, {"$push": {"retweeted_posts": int(post_id)}})
+    int_post_id = int(post_id)
+    post = db["posts"].find_one({"_id": int_post_id})
+
+    if post is None:
+        return "Post not found."
+
+    if username not in post.get("retweeted_by", []):
+        db["posts"].update_one({"_id": int_post_id}, {"$inc": {"retweets": 1}, "$push": {"retweeted_by": username}})
+        # We need to ensure we are incrementing retweets for the specific post in the user's posts array.
+        db["users"].update_one(
+            {"username": username, "posts._id": int_post_id},
+            {"$inc": {"posts.$.retweets": 1}, "$push": {"retweeted_posts": int_post_id}}
+        )
     else:
-        db["posts"].update_one({"_id": int(post_id)}, {"$inc": {"retweets": -1}, "$pull": {"retweeted_by": username}})
-        db["users"].update_one({"username": username}, {"$pull": {"retweeted_posts": int(post_id)}})
+        db["posts"].update_one({"_id": int_post_id}, {"$inc": {"retweets": -1}, "$pull": {"retweeted_by": username}})
+        # Likewise, decrementing retweets for the specific post in the user's posts array.
+        db["users"].update_one(
+            {"username": username, "posts._id": int_post_id},
+            {"$inc": {"posts.$.retweets": -1}, "$pull": {"retweeted_posts": int_post_id}}
+        )
     return None
