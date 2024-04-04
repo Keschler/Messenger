@@ -9,24 +9,47 @@
 </head>
 
 <body>
+<div id="header">
+    <button id="user_profile"><a href="{{ url_for('profile') }}">Profile</a></button>
+    {% if session.user %}
+        <button>
+            <a href="{{ url_for('logout') }}">Logout</a>
+        </button>
+    {% else %}
+        <button>
+            <a href="{{ url_for('register') }}">Register</a>
+        </button>
+    {% endif %}
+</div>
 <div id="title">Profile</div>
 <div id="outer_box">
     <div id="inner_box">
         {{ username }}
     </div>
-    {% for post in posts %}
-        <div class="post">
-            <p class="date">{{ post["date"] }}</p>
-            <p class="user">{{ post["user"] }}:</p>
-            <p class="content">{{ post["content"] }}</p>
-            <div class="post_bar">
-                <a class="likes_image" href="{{ url_for('likes', post_id=post['_id']) }}"></a>
-                <button class="likes">{{ post["likes"] }}</button>
-                <a class="retweet_image" href="{{ url_for('retweet', post_id=post['_id']) }}"></a>
-                <button class="retweets">{{ post["retweets"] }}</button>
+    <div class="feed">
+        {% for post in posts %}
+            <div class="post">
+                <p class="date">{{ post["date"] }}</p>
+                <p class="user">{{ post["user"] }}:</p>
+                <p class="content">{{ post["content"] }}</p>
+                <div class="post_bar">
+                    <a class="comment_image" onclick="document.querySelector('.modal').style.display='block'"></a>
+                    <button class="comment">{{ post.comments|length }}</button>
+                    <a class="likes_image" href="{{ url_for('likes', post_id=post['_id']) }}"></a>
+                    <button class="likes">{{ post["likes"] }}</button>
+                    <a class="retweet_image" href="{{ url_for('retweet', post_id=post['_id']) }}"></a>
+                    <button class="retweets">{{ post["retweets"] }}</button>
+                </div>
             </div>
-        </div>
-    {% endfor %}
+        {% endfor %}
+    </div>
+</div>
+<div class="modal">
+    <!-- Modal content -->
+    <div class="modal-content">
+        <input type="text" placeholder="Comment" class="comment_field">
+        <span class="close" onclick="document.querySelector('.modal').style.display='none'">&times;</span>
+    </div>
 </div>
 </body>
 

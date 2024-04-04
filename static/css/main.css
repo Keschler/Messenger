@@ -1,47 +1,9 @@
+@import 'common.css';
+
 body {
     margin: 0;
     font-family: sans-serif;
     overflow-x: hidden;
-}
-
-a {
-    color: inherit;
-}
-
-button {
-    width: min(100px, 10%);
-    background-color: rgb(184, 181, 181);
-    border: none;
-    display: inline-block;
-    color: black;
-    border-radius: 4px;
-    font-size: clamp(10px, 1vw, 3vw);
-    text-align: center;
-}
-
-#header {
-    display: flex;
-    justify-content: flex-end;
-    position: fixed;
-
-    height: 50px;
-    border-radius: 0;
-    width: 100%;
-    z-index: 1;
-    background-color: hsl(0, 0%, 85%);
-}
-
-
-#user_profile {
-    width: 5%;
-    /* Example size, adjust as needed */
-    height: 50px;
-    /* Same as width to create a circle */
-    border-radius: 50%;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    /* Optional: Adds a subtle shadow */
-    margin-right: auto;
-    margin-left: 10px;
 }
 
 .post {
@@ -90,7 +52,7 @@ button {
 }
 
 #feed > * {
-    width: 50%;
+    width: 70%;
 }
 
 .user {
@@ -106,98 +68,4 @@ button {
 .date {
     text-align: right;
     margin-bottom: 0;
-}
-
-.post_bar {
-    display: flex;
-    flex-direction: row;
-}
-
-.likes, .retweets, .comment {
-    width: 40px; /* adjust as needed */
-    height: 40px; /* should be equal to width */
-    padding: 10px; /* adjust as needed */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 50%;
-}
-
-.likes {
-    margin-right: 30%;
-}
-
-.likes_image {
-    margin-left: 20%;
-    background-image: url('https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.pngall.com%2Fwp-content%2Fuploads%2F5%2FLike-Button-PNG-Pic.png&f=1&nofb=1&ipt=4e1c367009a6684c71a6f7d4c3ebd585c5bc309ad01d4432116c523cf939315d&ipo=images');
-}
-
-.comment_image {
-    background-image: url('https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.pngall.com%2Fwp-content%2Fuploads%2F8%2FComment-PNG-Picture.png&f=1&nofb=1&ipt=722957779bb7932acb36e4c3a5770d5a707035d525d5f98088f25f7cc7e4d85d&ipo=images');
-}
-
-.retweet_image {
-    background-image: url('https://cdn-icons-png.flaticon.com/512/1388/1388895.png');
-}
-
-.retweet_image, .likes_image, .comment_image {
-    width: 40px;
-    background-size: cover;
-    background-repeat: no-repeat;
-    margin-right: 1%;
-}
-
-.likes_image:hover, .retweet_image:hover, .comment_image:hover {
-    filter: drop-shadow(0 0 10px #007bff); /* adjust color and blur radius as needed */
-    transition: filter 0.1s ease-in-out;
-    background-position: center;
-}
-
-
-.modal {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 2; /* Sit on top */
-    left: 0;
-    top: 0;
-    width: 100vw; /* Full viewport width */
-    height: 100vh; /* Full viewport height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgba(0, 0, 0, 0.4); /* Black with opacity */
-    backdrop-filter: blur(2px); /* Blur effect */
-
-}
-
-
-.modal-content {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #fefefe;
-    margin: 15% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-    height: 30%;
-    border-radius: 10px;
-}
-
-.comment_field {
-    width: 75vh;
-    height: 25vh;
-    border-radius: 10px;
-}
-
-
-.close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-}
-
-.close:hover,
-.close:focus {
-    color: black;
-    cursor: pointer;
 }

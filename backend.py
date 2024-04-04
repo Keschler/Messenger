@@ -33,13 +33,14 @@ def login_user(username, password):
 
 
 def get_all_posts():
-    posts = db["posts"].find()
+    posts = db["posts"].find().sort("_id", -1)
     return list(posts)
 
 
 def get_user_posts(username):
     user_posts = db["users"].find_one({"username": username})["posts"]  # Get the posts of the user
-    return user_posts
+    reversed_user_posts = user_posts[::-1]  # Reverse the list to show the latest post first
+    return reversed_user_posts
 
 
 def input_validation(username):
