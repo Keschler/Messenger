@@ -13,26 +13,23 @@ body, html {
 #outer_box {
     width: 500%;
     height: 400px;
-    margin-top: 20px; /* Add space above the box */
+    margin-top: 20px;
 }
 
 #inner_box {
-    background-color: #fff; /* White background for the form */
+    background-color: #fff;
     padding: 20px;
     border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-    display: flex;
-    flex-direction: column;
-    gap: 10px; /* Space between form elements */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     margin-right: 10%;
     margin-left: 10%;
 }
 
 #title {
-    font-size: 24px; /* Larger font size for title */
-    color: #333; /* Dark grey color */
-    font-weight: bold; /* Make the title bold */
-    align-self: center; /* Center the title */
+    font-size: 24px;
+    color: #333;
+    font-weight: bold;
+    align-self: center;
 }
 
 button {

@@ -33,7 +33,8 @@
                 <p class="user">{{ post["user"] }}:</p>
                 <p class="content">{{ post["content"] }}</p>
                 <div class="post_bar">
-                    <a class="comment_image" onclick="document.querySelector('.modal').style.display='block'"></a>
+                    <a class="comment_image"
+                       onclick="openModalwithPostContent('{{ post['content'] }}', '{{ post['user'] }}', '{{ post['date'] }}', {{ post['likes'] }}, {{ post['retweets'] }}, {{ post['comments'] | length }})"></a>
                     <button class="comment">{{ post.comments|length }}</button>
                     <a class="likes_image" href="{{ url_for('likes', post_id=post['_id']) }}"></a>
                     <button class="likes">{{ post["likes"] }}</button>
@@ -47,10 +48,17 @@
 <div class="modal">
     <!-- Modal content -->
     <div class="modal-content">
-        <input type="text" placeholder="Comment" class="comment_field">
+        <div class="modal-post-content">
+        </div>
+        <form class="comment_post_form">
+            <input type="text" placeholder="Comment" class="comment_field">
+            <button class="post_comment">Post</button>
+        </form>
         <span class="close" onclick="document.querySelector('.modal').style.display='none'">&times;</span>
     </div>
 </div>
+<script src="{{ url_for('static', filename='js/profile.js') }}"></script>
+
 </body>
 
 </html>
