@@ -1,4 +1,4 @@
-function openModalwithPostContent(postContent, postUser, postDate, postLikes, postRetweets, postCommentsLength) {
+function openModalwithPostContent(postContent, postUser, postDate, postLikes, postRetweets, postCommentsLength, post_id) {
     var modalPostContent = document.querySelector('.modal-post-content');
     modalPostContent.innerHTML = `
         <p class="date">${postDate}</p>
@@ -13,5 +13,18 @@ function openModalwithPostContent(postContent, postUser, postDate, postLikes, po
             <a class="retweet_image" href="{{ url_for('retweet', post_id=post['_id']) }}"></a>
             <button class="retweets">${postRetweets}</button>
         </div>`;
+    set_post_id(post_id)
+    set_post_creator_username(postUser)
     document.querySelector('.modal').style.display = 'block';
+}
+
+
+function set_post_id(post_id) {
+    var hidden_post_id = document.querySelector('#comment_post_id')
+    hidden_post_id.value = post_id
+}
+
+function set_post_creator_username(postUser){
+    var postCreator = document.querySelector('#post_creator')
+    postCreator.value = postUser
 }

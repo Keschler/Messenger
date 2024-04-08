@@ -48,7 +48,7 @@ body {
     align-items: center;
     flex-direction: column;
     position: relative;
-    top: 20vh;
+    top: 22vh;
 }
 
 #feed > * {

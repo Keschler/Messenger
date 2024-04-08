@@ -38,7 +38,10 @@ def get_all_posts():
 
 
 def get_user_posts(username):
-    user_posts = db["users"].find_one({"username": username})["posts"]  # Get the posts of the user
+    try:
+        user_posts = db["users"].find_one({"username": username})["posts"]
+    except TypeError:
+        return "TypeError"
     reversed_user_posts = user_posts[::-1]  # Reverse the list to show the latest post first
     return reversed_user_posts
 
@@ -63,27 +66,28 @@ def upload_message(user, content):
         "retweeted_by": [],
         "comments": []
     }
-    db["posts"].insert_one(post)  # Insert the post into the database
+    db["posts"].insert_one(post)
     db["users"].update_one({"username": user}, {"$push": {"posts": post}})
     return None
 
 
-def add_comment(post_id, username, content):
-    db["posts"].update_one({"_id": int(post_id)}, {"$push": {"comments": {"user": username, "content": content,
-                                                                          "date": datetime.now().strftime(
-                                                                              "%Y-%m-%d %H:%M:%S")}}})
-    return None
+def add_comment(post_id, username, content, post_creator):
+    print(post_id, username, content, post_creator)
+    int_post_id = int(post_id)
+    comment = {"comments": {"user": username, "content": content,
+                            "date": datetime.now().strftime(
+                                "%Y-%m-%d %H:%M:%S")}}
+    db["posts"].update_one({"_id": int_post_id}, {"$push": comment})
+    db["users"].update_one({"username": post_creator, "posts._id": int_post_id},
+                           {"$push": {"posts.$.comments": comment}})
 
 
 def update_likes(post_id, username):
     int_post_id = int(post_id)
-    # Find the post to see if the user has liked it
     post = db["posts"].find_one({"_id": int_post_id})
 
     if post is None:
         return "Post not found."
-    print(post)
-    # If the user has not liked the post
     if username not in post.get("liked_by", []):
         print("not liked")
         db["posts"].update_one({"_id": int_post_id}, {"$inc": {"likes": 1}, "$push": {"liked_by": username}})
@@ -105,23 +109,14 @@ def update_retweets(post_id, username):
 
     if username not in post.get("retweeted_by", []):
         db["posts"].update_one({"_id": int_post_id}, {"$inc": {"retweets": 1}, "$push": {"retweeted_by": username}})
-        # We need to ensure we are incrementing retweets for the specific post in the user's posts array.
         db["users"].update_one(
             {"username": username, "posts._id": int_post_id},
             {"$inc": {"posts.$.retweets": 1}, "$push": {"retweeted_posts": int_post_id}}
         )
     else:
         db["posts"].update_one({"_id": int_post_id}, {"$inc": {"retweets": -1}, "$pull": {"retweeted_by": username}})
-        # Likewise, decrementing retweets for the specific post in the user's posts array.
         db["users"].update_one(
             {"username": username, "posts._id": int_post_id},
             {"$inc": {"posts.$.retweets": -1}, "$pull": {"retweeted_posts": int_post_id}}
         )
-    return None
-
-
-def add_comment(post_id, username, content):
-    db["posts"].update_one({"_id": int(post_id)}, {"$push": {"comments": {"user": username, "content": content,
-                                                                          "date": datetime.now().strftime(
-                                                                              "%Y-%m-%d %H:%M:%S")}}})
     return None

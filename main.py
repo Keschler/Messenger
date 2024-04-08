@@ -83,6 +83,8 @@ def post():
 @check_login
 def profile():
     posts = get_user_posts(session["user"])
+    if posts == "TypeError":
+        return render_template("index.html")
     return render_template("profile.html", username=session["user"], posts=posts)
 
 
@@ -100,11 +102,10 @@ def retweet(post_id):
     return redirect(url_for("main"))
 
 
-@app.route("/comment/<post_id>")
+@app.route("/comment", methods=["POST"])
 @check_login
-def comment(post_id):
-    if request.form["content"]:
-        add_comment(post_id, session["user"], request.form["content"])
+def comment():
+    add_comment(request.form["post_id"], session["user"], request.form["comment_text"], request.form["post_creator"])
     return redirect(url_for("main"))
 
 
