@@ -22,12 +22,13 @@
     {% endif %}
 </div>
 <form action="{{ url_for('post') }}" method="post" id="post_form">
-    <input type="text" placeholder="What do you want to share?" id="post_input" name="content">
+    <input type="text" placeholder="What do you want to share?" id="post_input" name="content" maxlength="99">
     <button id="post_button" type="submit">Post</button>
 </form>
 <div id="feed">
     {% for post in posts %}
-        <div class="post">
+        <a href="{{ url_for('post', post_id=post["_id"]) }}">
+        <div class="post" >
             <p class="date">{{ post["date"] }}</p>
             <p class="user">{{ post["user"] }}:</p>
             <p class="content">{{ post["content"] }}</p>
@@ -41,6 +42,7 @@
                 <button class="retweets">{{ post["retweets"] }}</button>
             </div>
         </div>
+        </a>
     {% endfor %}
 </div>
 <div class="modal">
@@ -50,7 +52,7 @@
         <form class="comment_post_form" action="{{ url_for('comment') }}" method="post" id="comment_form">
             <input type="hidden" name="post_id" id="comment_post_id" required>
             <input type="hidden" name="post_creator" id="post_creator" required>
-            <input type="text" placeholder="Comment" name="comment_text" class="comment_field" required>
+            <input type="text" placeholder="Comment" name="comment_text" class="comment_field" maxlength="99" required>
             <button class="post_comment" type="submit">Post</button>
         </form>
         <span class="close" onclick="document.querySelector('.modal').style.display='none'">&times;</span>

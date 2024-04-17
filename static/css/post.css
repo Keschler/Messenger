@@ -1,0 +1,18 @@
+@import 'common.css';
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+.post {
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50%;
+}
+
+
+.comment_div {
+    text-align: center;
+}
+

@@ -1,6 +1,6 @@
 from flask import Flask, render_template, url_for, request, redirect, session
 from backend import register_user, login_user, get_all_posts, upload_message, update_likes, \
-    update_retweets, get_user_posts, add_comment
+    update_retweets, get_user_posts, add_comment, get_one_post
 from datetime import timedelta
 from functools import wraps
 
@@ -86,6 +86,16 @@ def profile():
     if posts == "TypeError":
         return render_template("index.html")
     return render_template("profile.html", username=session["user"], posts=posts)
+
+
+@app.route("/post")
+def user_post():
+    post_id = request.args.get('post_id')
+    if post_id is None:
+        return "Post ID is missing!", 400
+    post = get_one_post(post_id)
+    comments = post["comments"]
+    return render_template("post.html", post=post, comments=comments)
 
 
 @app.route("/likes/<post_id>")

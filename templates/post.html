@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/post.css') }}">
+    <title>Post</title>
+</head>
+<body>
+<div class="post">
+    <p class="date">{{ post["date"] }}</p>
+    <p class="user">{{ post["user"] }}:</p>
+    <p class="content">{{ post["content"] }}</p>
+    <div class="post_bar">
+        <a class="comment_image"
+           onclick="openModalwithPostContent('{{ post['content'] }}', '{{ post['user'] }}', '{{ post['date'] }}', {{ post['likes'] }}, {{ post['retweets'] }}, {{ post['comments'] | length }},  {{ post['_id'] }})"></a>
+        <button class="comment">{{ post.comments|length }}</button>
+        <a class="likes_image" href="{{ url_for('likes', post_id=post['_id']) }}"></a>
+        <button class="likes">{{ post["likes"] }}</button>
+        <a class="retweet_image" href="{{ url_for('retweet', post_id=post['_id']) }}"></a>
+        <button class="retweets">{{ post["retweets"] }}</button>
+    </div>
+</div>
+<div class="comments">
+    {% for comment in comments %}
+    <div class="comment_div">
+        <p class="date">{{ comment["date"] }}</p>
+        <p class="user">{{ comment["user"] }}:</p>
+        <p class="content">{{ comment["content"] }}</p>
+    </div>
+    {% endfor %}
+</div>
+<div class="modal">
+    <div class="modal-content">
+        <div class="modal-post-content">
+        </div>
+        <form class="comment_post_form" action="{{ url_for('comment') }}" method="post" id="comment_form">
+            <input type="hidden" name="post_id" id="comment_post_id" required>
+            <input type="hidden" name="post_creator" id="post_creator" required>
+            <input type="text" placeholder="Comment" name="comment_text" class="comment_field" required>
+            <button class="post_comment" type="submit">Post</button>
+        </form>
+        <span class="close" onclick="document.querySelector('.modal').style.display='none'">&times;</span>
+    </div>
+</div>
+<script src="{{ url_for('static', filename='js/comment.js') }}"></script>
+
+</body>
+</html>

@@ -7,7 +7,7 @@ body, html {
     justify-content: center; /* Center vertically */
     align-items: center; /* Center horizontally */
     background-color: #f0f0f0; /* Light grey background */
-    font-family: Arial, sans-serif; /* Default font */
+    font-family: Arial, sans-serif;
 }
 
 #outer_box {

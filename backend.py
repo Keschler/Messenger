@@ -46,6 +46,15 @@ def get_user_posts(username):
     return reversed_user_posts
 
 
+def get_one_post(post_id):
+    print(post_id)
+    try:
+        user_posts = db["posts"].find_one({"_id": int(post_id)})
+    except TypeError:
+        return "TypeError"
+    return user_posts
+
+
 def input_validation(username):
     username_pattern = re.compile("^[a-zA-Z0-9]+$")
     if username_pattern.match(username):
