@@ -55,3 +55,13 @@ button {
     margin-right: 10%;
     margin-left: 10%;
 }
+
+
+@media (min-width: 320px) and (max-width: 999px){
+    #outer_box{
+        width: 100%;
+    }
+    #header{
+        right: 2px;
+    }
+}

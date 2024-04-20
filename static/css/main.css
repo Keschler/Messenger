@@ -21,8 +21,9 @@ body {
     font-size: 2vw;
     text-align: center;
     width: 10%;
-    margin-left: auto;
-
+    height: 50px;
+    position: relative;
+    right: 24%;
 }
 
 #post_input {
@@ -30,8 +31,9 @@ body {
     font-size: 16px;
     border: 2px solid;
     border-radius: 4px;
-    position: absolute;
-    left: -54%;
+    position: relative;
+    bottom: 10%;
+    left: -64%;
 }
 
 #post_form {
@@ -68,4 +70,18 @@ body {
 .date {
     text-align: right;
     margin-bottom: 0;
+}
+
+
+@media (min-width: 320px) and (max-width: 999px) {
+    #post_button {
+        right: 240px;
+        width: 80px;
+        height: 40px;
+    }
+
+    #post_input {
+        left: -260px;
+        height: 23px;
+    }
 }
