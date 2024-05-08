@@ -24,7 +24,9 @@
 <div id="title">Profile</div>
 <div id="outer_box">
     <div id="inner_box">
-        {{ username }}
+        <p id="username">{{ username }}</p>
+        <p id="description">{{ description }}</p>
+        <button id="change_profile_button">Edit Profile</button>
     </div>
     <div class="feed">
         {% for post in posts %}

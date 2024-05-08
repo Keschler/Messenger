@@ -21,7 +21,6 @@ body {
     font-size: 2vw;
     text-align: center;
     width: 10%;
-    height: 50px;
     position: relative;
     right: 24%;
 }
@@ -33,6 +32,7 @@ body {
     border-radius: 4px;
     position: relative;
     bottom: 10%;
+    width: 15%;
     left: -64%;
 }
 
@@ -78,10 +78,12 @@ body {
         right: 240px;
         width: 80px;
         height: 40px;
+        font-size: 20px;
     }
 
     #post_input {
         left: -260px;
         height: 23px;
+        width: auto;
     }
 }
