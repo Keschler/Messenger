@@ -25,6 +25,13 @@ def register_user(username, password):
         return False
 
 
+def edit_profile(username_old, username_new, description):
+    if db["users"].find_one({"username": username_new}) is None:
+        db["users"].update_one({"username": username_old}, {"$set": {"description": description, "username": username_new}})
+        return True
+    return False
+
+
 def login_user(username, password):
     if not input_validation(username):
         return False

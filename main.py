@@ -1,7 +1,9 @@
-from flask import Flask, render_template, url_for, request, redirect, session
-import backend
 from datetime import timedelta
 from functools import wraps
+
+from flask import Flask, render_template, url_for, request, redirect, session
+
+import backend
 
 app = Flask(__name__)
 app.secret_key = "Halkd22f"
@@ -81,11 +83,29 @@ def post():
 @app.route("/profile")
 @check_login
 def profile():
-    description = backend.get_description(session["user"])
-    posts = backend.get_user_posts(session["user"])
+    username = session["user"]
+    description = backend.get_description(username)
+    posts = backend.get_user_posts(username)
     if posts == "TypeError":
         return render_template("index.html")
-    return render_template("profile.html", username=session["user"], posts=posts, description=description)
+    return render_template("profile.html", username=username, posts=posts, description=description)
+
+
+@app.route("/edit_profile", methods=["POST", "GET"])
+@check_login
+def edit_profile():
+    if request.method == "GET":
+        username = session["user"]
+        description = backend.get_description(username)
+        return render_template("edit_profile.html", username=username, description=description)
+    if request.method == "POST":
+        username_old = session["user"]
+        username_new = request.form["new_name"]
+        description = request.form["new_description"]
+        if backend.edit_profile(username_old, username_new, description):
+            session["user"] = username_new
+        return redirect(url_for("main"))
+
 
 
 @app.route("/post")
@@ -115,7 +135,8 @@ def retweet(post_id):
 @app.route("/comment", methods=["POST"])
 @check_login
 def comment():
-    backend.add_comment(request.form["post_id"], session["user"], request.form["comment_text"], request.form["post_creator"])
+    backend.add_comment(request.form["post_id"], session["user"], request.form["comment_text"],
+                        request.form["post_creator"])
     return redirect(url_for("main"))
 
 
