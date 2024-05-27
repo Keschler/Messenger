@@ -1,7 +1,8 @@
-from pymongo import MongoClient
-import bcrypt
 import re
 from datetime import datetime
+
+import bcrypt
+from pymongo import MongoClient
 
 cluster = MongoClient(
     "mongodb+srv://spadabailu:T94jkJaEAooyLhnhicmLhWTRVi3mu9X3WPDxWfDfWACcKjMeWs@cluster0.fzgybta.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
@@ -9,17 +10,26 @@ db = cluster["twitter"]
 
 
 def register_user(username, password):
+    description = ''
     if not input_validation(username):
         return False
     if db["users"].find_one({"username": username}) is None:  # If there is no user with the same name
         hashed_password = bcrypt.hashpw(
             password.encode('utf-8'), bcrypt.gensalt())
         db["users"].insert_one({"_id": db["users"].count_documents(
-            {}) + 1, "username": username, "password": hashed_password, "posts": [], "liked_posts": [],
+            {}) + 1, "username": username, "password": hashed_password, "description": description, "posts": [],
+                                "liked_posts": [],
                                 "retweeted_posts": []})
         return True
     else:
         return False
+
+
+def edit_profile(username_old, username_new, description):
+    if db["users"].find_one({"username": username_new}) is None:
+        db["users"].update_one({"username": username_old}, {"$set": {"description": description, "username": username_new}})
+        return True
+    return False
 
 
 def login_user(username, password):
@@ -30,6 +40,14 @@ def login_user(username, password):
         return True
     else:
         return False
+
+
+def get_description(username):
+    try:
+        description = db["users"].find_one({"username": username})["description"]
+    except TypeError:
+        return "TypeError"
+    return description
 
 
 def get_all_posts():
@@ -47,7 +65,6 @@ def get_user_posts(username):
 
 
 def get_one_post(post_id):
-    print(post_id)
     try:
         user_posts = db["posts"].find_one({"_id": int(post_id)})
     except TypeError:
@@ -98,7 +115,6 @@ def update_likes(post_id, username):
     if post is None:
         return "Post not found."
     if username not in post.get("liked_by", []):
-        print("not liked")
         db["posts"].update_one({"_id": int_post_id}, {"$inc": {"likes": 1}, "$push": {"liked_by": username}})
         db["users"].update_one({"username": username, "posts._id": int_post_id},
                                {"$inc": {"posts.$.likes": 1}, "$push": {"liked_posts": int_post_id}})

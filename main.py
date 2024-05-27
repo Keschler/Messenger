@@ -1,8 +1,9 @@
-from flask import Flask, render_template, url_for, request, redirect, session
-from backend import register_user, login_user, get_all_posts, upload_message, update_likes, \
-    update_retweets, get_user_posts, add_comment, get_one_post
 from datetime import timedelta
 from functools import wraps
+
+from flask import Flask, render_template, url_for, request, redirect, session
+
+import backend
 
 app = Flask(__name__)
 app.secret_key = "Halkd22f"
@@ -11,7 +12,7 @@ app.permanent_session_lifetime = timedelta(days=30)
 
 @app.route("/")
 def main():
-    posts = get_all_posts()
+    posts = backend.get_all_posts()
     if "user" in session:
         user = session["user"]
         return render_template("index.html", user=user, posts=posts)
@@ -34,7 +35,7 @@ def register():
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
-        if register_user(username, password):
+        if backend.register_user(username, password):
             session.permanent = True
             session["user"] = username
             return redirect(url_for("main"))
@@ -52,7 +53,7 @@ def login():
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
-        if login_user(username, password):
+        if backend.login_user(username, password):
             session.permanent = True
             session["user"] = username
             return redirect(url_for("main"))
@@ -75,17 +76,36 @@ def logout():
 @check_login
 def post():
     if request.form["content"]:
-        upload_message(session["user"], request.form["content"])
+        backend.upload_message(session["user"], request.form["content"])
     return redirect(url_for("main"))
 
 
 @app.route("/profile")
 @check_login
 def profile():
-    posts = get_user_posts(session["user"])
+    username = session["user"]
+    description = backend.get_description(username)
+    posts = backend.get_user_posts(username)
     if posts == "TypeError":
         return render_template("index.html")
-    return render_template("profile.html", username=session["user"], posts=posts)
+    return render_template("profile.html", username=username, posts=posts, description=description)
+
+
+@app.route("/edit_profile", methods=["POST", "GET"])
+@check_login
+def edit_profile():
+    if request.method == "GET":
+        username = session["user"]
+        description = backend.get_description(username)
+        return render_template("edit_profile.html", username=username, description=description)
+    if request.method == "POST":
+        username_old = session["user"]
+        username_new = request.form["new_name"]
+        description = request.form["new_description"]
+        if backend.edit_profile(username_old, username_new, description):
+            session["user"] = username_new
+        return redirect(url_for("main"))
+
 
 
 @app.route("/post")
@@ -93,7 +113,7 @@ def user_post():
     post_id = request.args.get('post_id')
     if post_id is None:
         return "Post ID is missing!", 400
-    post = get_one_post(post_id)
+    post = backend.get_one_post(post_id)
     comments = post["comments"]
     return render_template("post.html", post=post, comments=comments)
 
@@ -101,21 +121,22 @@ def user_post():
 @app.route("/likes/<post_id>")
 @check_login
 def likes(post_id):
-    update_likes(post_id, session["user"])
+    backend.update_likes(post_id, session["user"])
     return redirect(url_for("main"))
 
 
 @app.route("/retweet/<post_id>")
 @check_login
 def retweet(post_id):
-    update_retweets(post_id, session["user"])
+    backend.update_retweets(post_id, session["user"])
     return redirect(url_for("main"))
 
 
 @app.route("/comment", methods=["POST"])
 @check_login
 def comment():
-    add_comment(request.form["post_id"], session["user"], request.form["comment_text"], request.form["post_creator"])
+    backend.add_comment(request.form["post_id"], session["user"], request.form["comment_text"],
+                        request.form["post_creator"])
     return redirect(url_for("main"))
 
 

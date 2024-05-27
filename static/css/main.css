@@ -22,8 +22,7 @@ body {
     text-align: center;
     width: 10%;
     position: relative;
-    right: 45px;
-    top: 10px;
+    right: 24%;
 }
 
 #post_input {
@@ -31,8 +30,10 @@ body {
     font-size: 16px;
     border: 2px solid;
     border-radius: 4px;
-    position: absolute;
-    left: -63%;
+    position: relative;
+    bottom: 10%;
+    width: 15%;
+    left: -64%;
 }
 
 #post_form {
@@ -43,13 +44,13 @@ body {
 
 #feed {
     margin: 0.5%;
+    border: 2px solid black;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
     position: relative;
     top: 22vh;
-    left: 3vh;
 }
 
 #feed > * {
@@ -72,21 +73,17 @@ body {
 }
 
 
-@media (max-width: 700px) {
+@media (min-width: 320px) and (max-width: 999px) {
     #post_button {
-        width: 60px;
-        font-size: 30px;
-        right: 5px;
-        top: -3px;
-    }
-
-    #feed {
-        position: relative;
-        left: 0;
+        right: 240px;
+        width: 80px;
+        height: 40px;
+        font-size: 20px;
     }
 
     #post_input {
-        bottom: 0;
-        left: -65%;
+        left: -260px;
+        height: 23px;
+        width: auto;
     }
 }

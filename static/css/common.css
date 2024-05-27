@@ -19,6 +19,7 @@ a {
     justify-content: flex-end;
     position: fixed;
     top: 0;
+    left: 0;
     height: 50px;
     border-radius: 0;
     width: 100%;
@@ -28,21 +29,17 @@ a {
 
 
 #user_profile {
-    width: 5%;
-    /* Example size, adjust as needed */
     height: 50px;
-    /* Same as width to create a circle */
     border-radius: 50%;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    /* Optional: Adds a subtle shadow */
     margin-right: auto;
     margin-left: 10px;
 }
 
 .likes, .retweets, .comment {
-    width: 2.8em; /* adjust as needed */
-    height: 2.8em; /* should be equal to width */
-    padding: 0.5em; /* adjust as needed */
+    width: 2.8em;
+    height: 2.8em;
+    padding: 0.5em;
     display: flex;
     justify-content: center;
     align-items: center;

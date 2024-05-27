@@ -1,0 +1,16 @@
+@import 'common.css';
+
+body, html {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #f0f0f0;
+    font-family: Arial, sans-serif;
+}
+
+.submit_edit{
+    width: 20%;
+}
