@@ -56,7 +56,6 @@ body, html {
     background-color: #0056b3; /* Darker shade of blue for hover effect */
 }
 
-/* Responsive Styles */
 @media (max-width: 600px) {
     #login_form {
         width: 90%; /* Full width on smaller screens */

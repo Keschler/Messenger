@@ -16,3 +16,21 @@ body {
     text-align: center;
 }
 
+
+
+.comments{
+    margin: 0.5%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+}
+
+.comment_div{
+    display: flex;
+    flex-direction: column;
+    border: 2px solid grey;
+    border-radius: 1px;
+    width: 50.5%;
+}

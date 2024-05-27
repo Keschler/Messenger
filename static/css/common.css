@@ -66,11 +66,12 @@ a {
 }
 
 .likes_image {
-    margin-left: 20%;
+    margin-left: 25%;
     background-image: url('https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.pngall.com%2Fwp-content%2Fuploads%2F5%2FLike-Button-PNG-Pic.png&f=1&nofb=1&ipt=4e1c367009a6684c71a6f7d4c3ebd585c5bc309ad01d4432116c523cf939315d&ipo=images');
 }
 
 .comment_image {
+    margin-left: 20px;
     background-image: url('https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.pngall.com%2Fwp-content%2Fuploads%2F8%2FComment-PNG-Picture.png&f=1&nofb=1&ipt=722957779bb7932acb36e4c3a5770d5a707035d525d5f98088f25f7cc7e4d85d&ipo=images');
 }
 
