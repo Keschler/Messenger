@@ -30,7 +30,7 @@
         <a href="{{ url_for('post', post_id=post["_id"]) }}">
         <div class="post" >
             <p class="date">{{ post["date"] }}</p>
-            <p class="user">{{ post["user"] }}:</p>
+            <p class="user">{{ get_username(post["user_id"]) }}:</p>
             <p class="content">{{ post["content"] }}</p>
             <div class="post_bar">
                 <a class="comment_image"
