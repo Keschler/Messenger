@@ -108,7 +108,8 @@ def profile():
     posts = Post.get_user(username)
     if posts == "TypeError":
         return render_template("index.html")
-    return render_template("profile.html", username=username, posts=posts, description=description)
+    return render_template("profile.html", username=username, posts=posts, description=description,
+                           get_username=get_username)
 
 
 @app.route("/edit_profile", methods=["POST", "GET"])
@@ -118,14 +119,23 @@ def edit_profile():
         username = session["user"]
         user = User(username)
         description = user.get_description()
-        return render_template("edit_profile.html", username=username, description=description)
+        return render_template("edit_profile.html", username=username, description=description,
+                               get_username=get_username)
     if request.method == "POST":
         username_old = session["user"]
         username_new = request.form["new_name"]
         description = request.form["new_description"]
+        if not username_new.strip() and not description.strip():  # If both fields are empty
+            return redirect(url_for("main"))
         user = User(username_old)
-        if user.edit_profile(username_new, description):
-            session["user"] = username_new
+        if not username_new.strip():  # If description is empty
+            user.edit_profile(username_old, description, False)
+            return redirect(url_for("main"))
+        if not description.strip():  # If name is empty
+            user.edit_profile(username_new, description, None)
+        else:
+            user.edit_profile(username_new, description)
+        session["user"] = username_new
         return redirect(url_for("main"))
 
 

@@ -24,7 +24,7 @@ function set_post_id(post_id) {
     hidden_post_id.value = post_id
 }
 
-function set_post_creator_username(postUser){
+function set_post_creator_username(postUser) {
     var postCreator = document.querySelector('#post_creator')
     postCreator.value = postUser
 }

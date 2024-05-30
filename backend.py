@@ -55,16 +55,22 @@ class User:
         return description
 
     @staticmethod
-    def get_username(id):
-        username = db["users"].find_one({"_id": id})["username"]
+    def get_username(user_id):
+        username = db["users"].find_one({"_id": user_id})["username"]
         return username
 
-    def edit_profile(self, username_new: str, description: str):
-        if db["users"].find_one({"username": username_new}) is None:
-            db["users"].update_one({"username": self.username},
-                                   {"$set": {"description": description, "username": username_new}})
-            return True
-        return False
+    def edit_profile(self, username_new: str, description: str, new_name: bool = True) -> None:
+        if new_name and db["users"].find_one({"username": username_new}) is None:
+            # Update both username and description
+            update_fields = {"username": username_new, "description": description}
+        elif new_name is None and db["users"].find_one({"username": username_new}) is None:
+            # Update only the username
+            update_fields = {"username": username_new}
+        else:
+            # Update only the description
+            update_fields = {"description": description}
+        db["users"].update_one({"username": self.username}, {"$set": update_fields})
+        return None
 
 
 class Post:
@@ -111,7 +117,6 @@ class Post:
         return None
 
     def add_comment(self, username: str, content: str, post_creator: str):
-        print(self.post_id, username, content, post_creator)
         int_post_id = int(self.post_id)
         comment = {"comments": {"user": username, "content": content,
                                 "date": datetime.now().strftime(
